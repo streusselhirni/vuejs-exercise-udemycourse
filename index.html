@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<head>
+    <title>Monster Slayer</title>
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/foundation.min.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="app">
+    <section class="row">
+        <div class="small-6 columns">
+            <h1 class="text-center">YOU</h1>
+            <div class="healthbar">
+                <div
+                    class="healthbar text-center"
+                    style="background-color: green; margin: 0; color: white;"
+                    :style="{width: playerHealth + '%'}">
+                    {{ playerHealth }}
+                </div>
+            </div>
+        </div>
+        <div class="small-6 columns">
+            <h1 class="text-center">MONSTER</h1>
+            <div class="healthbar">
+                <div
+                    class="healthbar text-center"
+                    style="background-color: green; margin: 0; color: white;"
+                    :style="{width: monsterHealth + '%'}">
+                    {{ monsterHealth }}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="row controls" v-if="!started">
+        <div class="small-12 columns">
+            <button id="start-game" @click="startFight()">START NEW GAME</button>
+        </div>
+    </section>
+    <section class="row controls" v-if="started">
+        <div class="small-12 columns">
+            <button id="attack" @click="attack(false)">ATTACK</button>
+            <button id="special-attack" @click="attack(true)">SPECIAL ATTACK</button>
+            <button id="heal" @click="heal()">HEAL</button>
+            <button id="give-up" @click="giveUp()">GIVE UP</button>
+        </div>
+    </section>
+    <section class="row log" v-if="fightLog.length !== 0">
+        <div class="small-12 columns">
+            <ul>
+                <li
+                    v-for="entry in fightLog"
+                    :class="{'player-turn': entry.playerAttack, 'monster-turn': !entry.playerAttack}">
+                    <span v-if="entry.playerAttack && (!entry.heal)">
+                        PLAYER HITS MONSTER FOR {{ entry.dmg }}
+                    </span>
+                    <span v-else-if="entry.playerAttack && entry.heal">
+                        PLAYER HEALS FOR {{ entry.dmg }}
+                    </span>
+                    <span v-if="!entry.playerAttack">
+                        MONSTER HITS PLAYER FOR {{ entry.dmg }}
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </section>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
